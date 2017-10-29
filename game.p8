@@ -38,6 +38,7 @@ p = {
   y = 64,
   w = 8,
   h = 8,
+  alive = true,
 }
 
 obstacles = {}
@@ -55,7 +56,23 @@ function newObstacle(x, y, w, h, c, sx, sy)
   return o
 end
 
+function collision(o)
+  local col = (p.x <= o.x + o.w and
+               p.x + p.w >= o.x and
+               p.y <= o.y + o.h and
+               p.y + p.h >= o.y)
+  if col then
+    p.alive = false
+  end
+end
+
 function _update()
+  -- Check collision
+  foreach(obstacles, collision)
+
+  if not p.alive then
+    return
+  end
   -- Change dir
   if (changeDir()) then
     p.d += 1
@@ -71,6 +88,10 @@ function draw(o)
 end
 
 function _draw()
+  if not p.alive then
+    print("Game Over", 10, 10)
+    return
+  end
   cls()
   -- obstacles
   foreach(obstacles, draw)
