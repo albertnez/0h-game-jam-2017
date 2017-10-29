@@ -54,11 +54,10 @@ end
 function _draw()
   cls()
   local s = 1
-  -- if p.d >= 2 then s = 2 end
+  if p.d >= 2 then s = 2 end
   local flipx = (p.d == 3)
   local flipy = (p.d == 1)
-  spr(s, p.x, p.y)
-  --spr(s, p.x, p.y, p.w, p.h, flipx, flipy)
+  spr(s, p.x, p.y, 1, 1, flipx, flipy)
 end
 
 function _init()
