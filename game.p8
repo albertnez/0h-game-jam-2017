@@ -109,7 +109,7 @@ end
 
 
 function _update()
-  if not p.alive and btnp(4) then
+  if not p.alive and btnp(5) then
     restart()
     return
   end
@@ -147,7 +147,7 @@ end
 function _draw()
   if not p.alive then
     print("game over", 10, 10, 7)
-    print("press z to start again", 10, 16, 7)
+    print("press x to start again", 10, 16, 7)
     return
   end
   cls()
