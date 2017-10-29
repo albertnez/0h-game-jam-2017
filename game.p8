@@ -40,6 +40,21 @@ p = {
   h = 8,
 }
 
+obstacles = {}
+
+function newObstacle(x, y, w, h, c, sx, sy)
+  o = {
+    x = x,
+    y = y,
+    w = w,
+    h = h,
+    c = c,
+    sx = sx,
+    sy = sy,
+  }
+  return o
+end
+
 function _update()
   -- Change dir
   if (changeDir()) then
@@ -51,8 +66,15 @@ function _update()
   p.y += inc.y * p.v
 end
 
+function draw(o)
+  rectfill(o.x, o.y, o.x+o.w, o.y+o.h, o.c)
+end
+
 function _draw()
   cls()
+  -- obstacles
+  foreach(obstacles, draw)
+  -- player
   local s = 1
   if p.d >= 2 then s = 2 end
   local flipx = (p.d == 3)
@@ -61,7 +83,8 @@ function _draw()
 end
 
 function _init()
-	cls()
+  add(obstacles, newObstacle(32, 32, 5, 5, 8, 0, 0))
+  add(obstacles, newObstacle(0, 0, 5, 128, 8, 0, 0))
 end
 __gfx__
 0000000000000000000000cc00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
