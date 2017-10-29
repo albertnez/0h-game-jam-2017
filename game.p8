@@ -30,20 +30,6 @@ function changeDir()
   return false
 end
 
-t = 0
-cooldown = 50
-p = {
-  s = 1,
-  v = 2,
-  d = 0,
-  x = 64,
-  y = 64,
-  w = 8,
-  h = 8,
-  alive = true,
-}
-
-obstacles = {}
 
 function newObstacle(x, y, w, h, c, sx, sy)
   o = {
@@ -100,7 +86,34 @@ function spawnObstacle()
   add(obstacles, newObstacle(x, y, 8, 8, 8, dx, dy))
 end
 
+function restart()
+  t = 0
+  cooldown = 50
+  p = {
+    s = 1,
+    v = 2,
+    d = 0,
+    x = 64,
+    y = 64,
+    w = 8,
+    h = 8,
+    alive = true,
+  }
+  obstacles = {}
+  local w = 6
+  add(obstacles, newObstacle(0, 0, w, 128, 8, 0, 0))
+  add(obstacles, newObstacle(128-w, 0, w, 128, 8, 0, 0))
+  add(obstacles, newObstacle(0, 0, 128, w, 8, 0, 0))
+  add(obstacles, newObstacle(0, 128-w, 128, w, 8, 0, 0))
+end
+
+
 function _update()
+  if not p.alive and btnp(4) then
+    restart()
+    return
+  end
+
   t += 1
   -- Check collision
   foreach(obstacles, collision)
@@ -109,14 +122,12 @@ function _update()
   if not p.alive then
     return
   end
+
   -- spawn
-
-
   if (t % 100) == 0  then cooldown -= 1 end
   if (t % cooldown) == 0 then
     spawnObstacle()
   end
-
 
   -- Change dir
   if (changeDir()) then
@@ -135,12 +146,17 @@ end
 
 function _draw()
   if not p.alive then
-    print("Game Over", 10, 10, 7)
+    print("game over", 10, 10, 7)
+    print("press z to start again", 10, 16, 7)
     return
   end
   cls()
   -- obstacles
   foreach(obstacles, draw)
+
+  --score
+  print("score: "..t, 8, 1, 2)
+
   -- player
   local s = 1
   if p.d >= 2 then s = 2 end
@@ -150,10 +166,7 @@ function _draw()
 end
 
 function _init()
-  add(obstacles, newObstacle(0, 0, 5, 128, 8, 0, 0))
-  add(obstacles, newObstacle(128-5, 0, 5, 128, 8, 0, 0))
-  add(obstacles, newObstacle(0, 0, 128, 5, 8, 0, 0))
-  add(obstacles, newObstacle(0, 128-5, 128, 5, 8, 0, 0))
+  restart()
 end
 __gfx__
 0000000000000000000000cc00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
